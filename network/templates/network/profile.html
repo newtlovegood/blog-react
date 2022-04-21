@@ -1,0 +1,64 @@
+{% extends 'network/layout.html' %}
+{% load static %}
+
+{% block title %}
+    {{ profile.username.capitalize }}'s Profile
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/profile.js' %}"></script>
+{% endblock %}
+
+
+{% block body %}
+    <div class="jumbotron">
+        <div>
+            {% if request.user != profile %}
+                {% if current_user_followed_by %}
+                    <input id="follow-btn" class="btn btn-danger" type="submit" data-follow="{{ profile.id }}" value="Unfollow">
+                {% else %}
+                    <input id="follow-btn" class="btn btn-success" type="submit" data-follow="{{ profile.id }}" value="Follow">
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <div id="profile-data">
+            <h2>{{ profile.username }}</h2>
+            <img src="{% static profile.image.url %}">
+            <p>Bio: {{ profile.bio }}</p>
+            <p>Birth Date: {{ profile.birth_date }}</p>
+
+            <p id="followers">Followers: {{ followers|length }}</p>
+            <p id="following">Following: {{ following|length }}</p>
+        </div>
+
+        <h3>{{ profile.username.capitalize }}'s posts</h3>
+
+        <div id="posts-container">
+            {% for post in posts %}
+                <div>
+                    <p><a href="{% url 'profile' post.user_id %}">{{ post.user }}</a></p>
+                    <p class="post-content" data-content-id="{{ post.id }}">{{ post.content }}</p>
+                    <p class="post-date">{{ post.timestamp }}</p>
+                    <div>
+                        <div>
+                            {% if post.id in liked_by_current_user %}
+                                <ion-icon name="heart" class="like-btn" data-post-id="{{ post.id }}"></ion-icon>
+                            {% else %}
+                                <ion-icon name="heart-outline" class="like-btn" data-post-id="{{ post.id }}"></ion-icon>
+                            {% endif %}
+                            <span>{{ post.posts_likes.all|length }}</span>
+                        </div>
+
+                        <span>{{ post.reposts }} Reposts</span>
+                        <a href="#">Show comments</a>
+                        {% if post.user_id == request.user.id %}
+                            <button data-post-id="{{ post.id }}" class="btn btn-primary edit-post-btn" >Edit</button>
+                        {% endif %}
+                    </div>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

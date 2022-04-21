@@ -1,0 +1,27 @@
+.like-btn {
+    font-size: 30px;
+}
+
+.like-btn:hover {
+    background-color: beige;
+}
+
+div {
+    /*border: 1px solid;*/
+}
+
+.top-container {
+    margin: 0 auto;
+    text-align: left;
+    width: 700px;
+}
+
+.single-container {
+    border: 1px grey;
+    border-radius: 5px;
+}
+
+.image-in-post {
+    width: 50px;
+    height: auto;
+}
